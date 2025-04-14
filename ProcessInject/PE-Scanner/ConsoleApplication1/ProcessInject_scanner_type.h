@@ -48,5 +48,14 @@ namespace PrcessInject_scanner {
 		OBFUSC_COUNT
 	};
 
+	enum struct t_dump_mode
+	{
+		PE_DUMP_AUTO = 0, 
+		PE_DUMP_VIRTUAL,
+		PE_DUMP_UNMAP,
+		PE_DUMP_REALIGN,
+		PE_DUMP_MODES_COUNT
+	};
+
 
 }
