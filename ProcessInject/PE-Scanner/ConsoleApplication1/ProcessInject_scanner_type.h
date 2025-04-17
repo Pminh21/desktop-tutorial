@@ -3,7 +3,7 @@
 
 #define ELEMENT_LIST_SEPARATOR ';'
 
-namespace PrcessInject_scanner {
+namespace ProcessInject_scanner {
 	
 	// trạng thái trả về nếu scan bị lỗi
 	const DWORD ERROR_SCAN_FAILURE = static_cast<DWORD>(-1);
@@ -84,7 +84,7 @@ namespace PrcessInject_scanner {
 	enum struct t_iat_scan_mode
 	{
 		PE_IATS_NONE = 0,
-		PE_IAT_CLEAN_SYS_FILTRERED,
+		PE_IAT_CLEAN_SYS_FILTERED,
 		PE_IAT_ALL_SYS_FILTERED,
 		PE_IAT_UNFILTERED,
 		PE_IAT_MODES_COUNT,
@@ -107,13 +107,76 @@ namespace PrcessInject_scanner {
 		PE_DATA_SCAN_NO_DEP, //	scan data no dep hoac .net apllication
 		PE_DATA_SCAN_ALWAYS, // scan vo dieu kien
 		PE_DATA_SCAN_INACCESSIBLE, // scan data vo dieu kien, va cac trang khong the truy cap duoc
-		PE_DATA_SCAN_INACCESSIBLE, // scan cac trang khong the truy cap duoc
+		PE_DATA_SCAN_INACCESSIBLE_ONLY, // scan cac trang khong the truy cap duoc
 		PE_DATA_COUNT
 	};
 
 	enum struct t_json_level
 	{
 		JSON_BASIC = 0, // BASIC
-		JSON_DETAILS = 1, //
+		JSON_DETAILS = 1, // basic list patches
+		JSON_DETAILS2 , // extenđe list patches
+		JSON_LVL_COUNT
 	};
+
+	enum struct t_report_type
+	{
+		REPORT_NONE = 0, // k output report
+		REPORT_SCANNED, //	report scan
+		REPORT_DUMPED, // report dump
+		REPORT_ALL
+	};
+
+	struct PARAM_STRING
+	{
+		ULONG length;
+		char* buffer;
+	};
+
+	struct params
+	{
+		DWORD pid;							// PID của process scan
+		t_dotnet_policy dotnet_policy;		// policy cho scan .dotnet
+		t_imprec_mode imprec_mode;			// import recovery mode
+		bool quiet;
+		t_output_filter output_filter;		// mô tả output 
+		bool no_hooks;						// không scan hooks
+		t_shellcode_mode shellcode;			// phát hiện shellcode
+		t_obfusc_mode obfuscated;			// phát hiện mã hoá
+		bool threads;						// scan thread
+		t_iat_scan_mode iat;				// phát hiện IAT hooking
+		t_data_scan_mode iat_data;			
+		bool minidump;
+		bool rebase;
+		t_dump_mode dump_mode;
+		bool json_output;
+		bool make_reflection;
+		bool use_cache;
+		t_json_level json_lv1;
+		t_results_filter results_filter;
+		char output_dir[MAX_PATH + 1];
+		PARAM_STRING modules_ignored;
+		PARAM_STRING pattern_file;
+	}t_params;
+
+	struct report
+	{
+		DWORD PID;			// PID của process
+		bool is_managed;	// process managed ??
+		bool is_x64;		// process 64 bit ??
+		bool is_reflection;	// scan process reflection
+		DWORD scanned;		// so module scan
+		DWORD suspicious;	// so luong suspicious
+		DWORD replaced;		// PE file bi repleced voi process hollowing
+		DWORD hdr_mod;		// PE header bi modified
+		DWORD unreacheable_file; // khong the doc file boi modul trong bo nho
+		DWORD patched;		// phat hien su chinh sua trongg code
+		DWORD iat_hooked;	// phat hien IAT Hooks
+		DWORD implanted;	// phat hien inject: shellcode + PE
+		DWORD implanted_pe;
+		DWORD implanted_shellcode;
+		DWORD other;
+		DWORD skipper;
+		DWORD error;
+	}t_report;
 }
