@@ -133,7 +133,7 @@ namespace ProcessInject_scanner {
 		char* buffer;
 	};
 
-	struct params
+	struct t_params
 	{
 		DWORD pid;							// PID của process scan
 		t_dotnet_policy dotnet_policy;		// policy cho scan .dotnet
@@ -157,9 +157,9 @@ namespace ProcessInject_scanner {
 		char output_dir[MAX_PATH + 1];
 		PARAM_STRING modules_ignored;
 		PARAM_STRING pattern_file;
-	}t_params;
+	};
 
-	struct report
+	struct t_report
 	{
 		DWORD PID;			// PID của process
 		bool is_managed;	// process managed ??
@@ -178,5 +178,5 @@ namespace ProcessInject_scanner {
 		DWORD other;
 		DWORD skipper;
 		DWORD error;
-	}t_report;
+	};
 }
